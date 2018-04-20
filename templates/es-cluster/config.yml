@@ -1,4 +1,4 @@
-name: Elasticsearch 5 Cluster
+name: Elasticsearch 6.2.4 Cluster
 description: |
   Elasticsearch, you know for search!
 version: 5
