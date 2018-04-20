@@ -5,7 +5,7 @@ services:
             io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
             io.rancher.container.hostname_override: container_name
             io.rancher.sidekicks: es-master-storage{{- if eq .Values.UPDATE_SYSCTL "true" -}},es-master-sysctl{{- end}}
-        image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+        image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
         environment:
             - "cluster.name=${cluster_name}"
             - "node.name=$${HOSTNAME}"
@@ -35,7 +35,7 @@ services:
             io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
             io.rancher.container.hostname_override: container_name
             io.rancher.sidekicks: es-data-storage{{- if eq .Values.UPDATE_SYSCTL "true" -}},es-data-sysctl{{- end}}
-        image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+        image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
         environment:
             - "cluster.name=${cluster_name}"
             - "node.name=$${HOSTNAME}"
@@ -66,7 +66,7 @@ services:
             io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
             io.rancher.container.hostname_override: container_name
             io.rancher.sidekicks: es-client-storage{{- if eq .Values.UPDATE_SYSCTL "true" -}},es-client-sysctl{{- end}}
-        image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+        image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
         environment:
             - "cluster.name=${cluster_name}"
             - "node.name=$${HOSTNAME}"
