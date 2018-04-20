@@ -93,6 +93,8 @@ services:
             - es-client-storage
         depends_on:
             - es-master
+        ports:
+            - "9200:9200"
 
     es-master-storage:
         labels:
@@ -105,6 +107,7 @@ services:
             - SERVICE_VOLUME=/usr/share/elasticsearch/data
         volumes:
             - es-storage-volume:/usr/share/elasticsearch/data
+
     es-client-storage:
         labels:
             io.rancher.container.start_once: true
@@ -116,6 +119,7 @@ services:
             - SERVICE_VOLUME=/usr/share/elasticsearch/data
         volumes:
             - es-storage-volume:/usr/share/elasticsearch/data
+
     es-data-storage:
         labels:
             io.rancher.container.start_once: true
