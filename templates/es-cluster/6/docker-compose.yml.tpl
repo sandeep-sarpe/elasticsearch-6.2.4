@@ -162,7 +162,7 @@ services:
     
     {{- if eq .Values.INCLUDE_KIBANA "true" }}
     es-kibana:
-        image: docker.elastic.co/kibana/kibana:5.6.7
+        image: docker.elastic.co/kibana/kibana-oss:6.2.4
         environment:
             - "ELASTICSEARCH_URL=http://es-client:9200"
             - "xpack.security.enabled=false"
