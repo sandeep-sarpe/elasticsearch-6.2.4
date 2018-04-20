@@ -1,0 +1,25 @@
+version: '2'
+services:
+  mqlight-datavolume:
+    image: alpine:3.4
+    entrypoint:
+    - /bin/true
+    network_mode: none
+    volumes:
+    - /var/mqlight
+    labels:
+      io.rancher.container.start_once: 'true'
+      io.rancher.container.hostname_override: container_name
+  mqlight-server:
+    image: ibmcom/mqlight:1.0
+    environment:
+      LICENSE: accept
+    tty: true
+    volumes_from:
+    - mqlight-datavolume
+    ports:
+    - ${ampq_port}:5672/tcp
+    - ${ui_port}:9180/tcp
+    labels:
+      io.rancher.sidekicks: mqlight-datavolume
+      io.rancher.container.hostname_override: container_name

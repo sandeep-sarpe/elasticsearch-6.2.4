@@ -1,0 +1,110 @@
+version: '2'
+catalog:
+  name: "GrayLog"
+  version: "v2.4.3-2"
+  description: "Graylog cluster"
+  uuid: graylogserver-2
+  minimum_rancher_version: v1.6.10
+  questions:
+    - variable: "INITIAL_MEM"
+      description: "Initial memory (GB)"
+      label: "Initial Memory"
+      required: true
+      default: "1"
+      type: "int"
+    - variable: "MAX_MEM"
+      description: "Max memory (GB) - should be at least 2x Initial Memory!"
+      label: "Maximum Memory"
+      required: true
+      default: "2"
+      type: "int"
+    - variable: "DB_USER"
+      description: "Mongo Username for GrayLog to use"
+      label: "Mongo username"
+      required: true
+      default: "graylog"
+      type: "string"
+    - variable: "DB_PW"
+      description: "Mongo password"
+      label: "Mongo password"
+      required: true
+      default: "password"
+      type: "string"
+    - variable: DB_NAME
+      description: "Mongo database"
+      label: "Mongo database to use"
+      type: "string"
+      required: true
+      default: "graylog"
+    - variable: RS_NAME
+      description: "Name of the replica set in mongo"
+      label: "Replica set name"
+      type: "string"
+      required: true
+      default: "rs01"
+    - variable: DB_URIS
+      description: "Comma-seperated list of mongodb locations:ports"
+      label: "DB Locations"
+      type: "string"
+      required: true
+      default: "mongodb-node01:27017,mongodb-node02:27017,mongodb-node03:27017"
+    - variable: GRAYLOG_PASSWORD_SECRET
+      description: |
+        Secret to secure/pepper the stored user passwords - use at least 64 characters.
+        You may generate it with pwgen -N 1 -s 96 or something similar
+      label: "Password secret"
+      type: "string"
+      required: true
+      default: "somepasswordpepper"
+    - variable: GRAYLOG_ROOT_PASSWORD_SHA2
+      description: |
+        SHA2 encrypted password for admin user.
+        You may generate it with echo -n YOURPASSWORD | shasum -a 256
+      label: "Admin password"
+      type: "string"
+      required: true
+      default: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
+    - variable: GRAYLOG_REST_TRANSPORT_URI
+      description: |
+        URI of the Graylog REST transport API.
+        You should point this at your load balancer
+      label: "Rest Transport API"
+      type: "string"
+      required: true
+      default: "http://127.0.0.1:9000/api/"
+    - variable: "VOLUME_DRIVER"
+      description: "The VOLUME driver to associate with this server"
+      label: "VOLUME Driver"
+      required: true
+      default: "local"
+      type: enum
+      options:
+        - local
+        - rancher-nfs
+        - rancher-efs
+        - rancher-ebs
+    - variable: "ES_LINK"
+      description: "ElasticSearch ingestion node"
+      label: "ElasticSearch Service"
+      required: true
+      type: "service"
+    - variable: "ZK_LINK"
+      description: "Zookeeper service - Provides intra-network connectivity to Zookeeper"
+      label: "Zookeeper service(s)"
+      required: false
+      type: "service"
+    - variable: "KAFKA_LINK"
+      description: "Kafka service - Provides intra-network connectivity to kafka"
+      label: "Kafka broker service(s)"
+      required: false
+      type: "service"
+    - variable: cluster_size
+      description: "Number of servers - Anything over 1 breaks the API until vNext of graylog."
+      label: "Cluster size"
+      type: "int"
+      required: true
+      default: "1"
+services:
+  graylog-server:
+    scale: ${cluster_size}
+

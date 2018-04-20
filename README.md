@@ -1,3 +1,3 @@
-# elasticsearch-6.2.4 Intial doc
-
-
+# Rancher-Catalog
+A catalog of application stacks for use by Rancher
+# elasticsearch-6.2.4

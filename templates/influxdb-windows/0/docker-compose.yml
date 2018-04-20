@@ -1,0 +1,59 @@
+version: '2'
+services:
+  influxdb:
+    image: influxdb:1.4.2-alpine
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+      io.rancher.container.hostname_override: container_name
+      io.rancher.sidekicks: influxdb-volume
+    volumes_from:
+      - influxdb-volume
+  influxdb-volume:
+    network_mode: "none"
+    labels:
+      io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.start_once: true
+    environment:
+      - SERVICE_UID=0
+      - SERVICE_GID=0
+      - SERVICE_VOLUME=/var/lib/influxdb
+    volumes:
+      - influxdbdata:/var/lib/influxdb
+    image: rawmind/alpine-volume:0.0.2-2
+
+  grafana:
+    image: grafana/grafana:4.6.3
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+      io.rancher.container.hostname_override: container_name
+      io.rancher.sidekicks: grafana-data
+    external_links:
+    - influxdb:influxdb
+    volumes_from:
+      - grafana-data
+  grafana-data:
+    image: jeffkolb/graf-db:v0.0.1
+    network_mode: "none"
+    labels:
+      io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.start_once: true
+    environment:
+      - SERVICE_UID=104
+      - SERVICE_GID=107
+      - SERVICE_VOLUME=/var/lib/grafana
+    volumes:
+      - grafdata:/var/lib/grafana
+volumes:
+  grafdata:
+    driver: ${VOLUME_DRIVER}
+    per_container: true
+  influxdbdata:
+    driver: ${VOLUME_DRIVER}
+    per_container: true
+

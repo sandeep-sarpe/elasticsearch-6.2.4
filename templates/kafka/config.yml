@@ -1,0 +1,9 @@
+name: Apache Kafka
+description: |
+  Kafka cluster including Kafka Manager
+version: 0.10.2.0-rancher
+category: Clustering
+maintainer: "Jeff Kolb <jeff.kolb@intlfcstone.com>"
+minimum_rancher_version: v1.6.0
+license: 
+projectURL: https://github.com/INTLFCStone/Rancher-Catalog

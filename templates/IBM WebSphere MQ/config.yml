@@ -1,0 +1,10 @@
+name: IBM WebSphere MQ
+
+description: |
+   IBM's Message Oriented Middleware for service-oriented architectures.
+version: 1.0.0
+category: Message queues
+maintainer: "Jeff Kolb <jeff.kolb@intlfcstone.com>"
+minimum_rancher_version: v1.1.3
+projectURL: http://www.ibm.com/software/products/en/ibm-mq
+

@@ -1,0 +1,27 @@
+.catalog:
+  name: "MongoDB"
+  version: "3.4-rancher1"
+  description: "MongoDB Single Server"
+  minimum_rancher_version: v1.6.0
+  questions:
+    - variable: "VOLUME_DRIVER"
+      description: "The VOLUME driver to associate with this server"
+      label: "VOLUME Driver"
+      required: true
+      default: "local"
+      type: enum
+      options:
+        - local
+        - rancher-nfs
+        - rancher-efs
+        - rancher-ebs
+mongo:
+  scale: 1
+  start_on_create: true
+  retain_ip: true
+  health_check:
+    port: 27017
+    interval: 15000
+    unhealthy_threshold: 3
+    healthy_threshold: 2
+    response_timeout: 2000

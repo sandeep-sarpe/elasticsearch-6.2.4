@@ -1,0 +1,9 @@
+name: Redis Cluster
+description: |
+  A cluster of Redis instances + Sentinel for High Availability
+version: 0.0.1.0-rancher
+category: Clustering
+maintainer: "Jeff Kolb <jeff.kolb@intlfcstone.com>"
+minimum_rancher_version: v1.6.0
+license: 
+projectURL: https://github.com/INTLFCStone/Rancher-Catalog

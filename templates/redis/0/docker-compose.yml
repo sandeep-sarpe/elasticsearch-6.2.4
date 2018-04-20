@@ -1,0 +1,27 @@
+version: '2'
+services:
+  redis-sentinel:
+    image: intlfcstone/rancher-redis-cluster-sentinel:4.0.7
+    environment:
+      SENTINEL_DOWN_AFTER_MILLISECONDS: '5000'
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.container.agent.role: environment
+      io.rancher.container.create_agent: 'true'
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.pull_image: always
+    sysctls:
+      net.core.somaxconn: "511"
+  redis-server:
+    image: intlfcstone/rancher-redis-cluster-node:4.0.7
+    stdin_open: true
+    volumes:
+    - /data/redis:/data
+    tty: true
+    labels:
+      io.rancher.container.hostname_override: container_name
+      redis-server: '1'
+      io.rancher.container.pull_image: always
+    sysctls:
+      net.core.somaxconn: "511"

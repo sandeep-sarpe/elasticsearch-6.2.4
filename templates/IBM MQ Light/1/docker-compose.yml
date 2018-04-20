@@ -1,0 +1,25 @@
+version: '2'
+services:
+  mqlight-datavolume:
+    image: intlfcstone/mqlight-datavolume:v1.0.0
+    entrypoint:
+    - /bin/true
+    network_mode: none
+    volumes:
+    - /var/mqlight
+    - /etc/ssl/mqlight
+    labels:
+      io.rancher.container.start_once: 'true'
+      io.rancher.container.hostname_override: container_name
+  mqlight-server:
+    image: ibmcom/mqlight:1.0
+    environment:
+      LICENSE: accept
+      MQLIGHT_TLS_PASSPHRASE: changeme
+      MQLIGHT_TLS_KEYSTORE: /etc/ssl/mqlight/certificate.p12
+    tty: true
+    volumes_from:
+    - mqlight-datavolume
+    labels:
+      io.rancher.sidekicks: mqlight-datavolume
+      io.rancher.container.hostname_override: container_name

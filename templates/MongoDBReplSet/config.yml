@@ -1,0 +1,5 @@
+name: MongoDB RS
+description: |
+  MongoDB Replica Set
+version: "rancher"
+category: Databases

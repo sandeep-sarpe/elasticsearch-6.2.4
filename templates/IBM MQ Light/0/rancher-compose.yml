@@ -1,0 +1,29 @@
+.catalog:
+  name: "IBM MQ Light"
+  version: "1.0.0"
+  description: "A simple yet powerful AMQP-based messaging API. Write apps that run locally, in the cloud, or alongside IBM MQ."
+  uuid: IBMMQLIGHT-JeffK1
+  minimum_rancher_version: v1.1.3
+  questions:
+    - variable: ui_port
+      description: "Public port to expose for the web UI."
+      label: "UI Port"
+      type: "string"
+      required: true
+      default: "9180"
+    - variable: ampq_port
+      description: "Public port to expose for AMPQ traffic."
+      label: "AMPQ port"
+      type: "string"
+      required: true
+      default: "5672"
+
+version: '2'
+services:
+  mqlight-datavolume:
+    scale: 1
+    start_on_create: true
+  mqlight-server:
+    scale: 1
+    start_on_create: true
+

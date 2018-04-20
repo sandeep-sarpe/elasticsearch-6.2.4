@@ -1,0 +1,95 @@
+version: '2'
+services:
+  webspheremq-datavolume:
+    image: alpine:3.4
+    entrypoint:
+    - /bin/true
+    network_mode: none
+    volumes:
+    - /var/mqm
+    labels:
+      io.rancher.container.start_once: 'true'
+      io.rancher.container.hostname_override: container_name
+  mq:
+    image: jeffkolb/rancher-websphere-mq:9
+    environment:
+      LICENSE: "accept"
+      MQ_QMGR_NAME: ${mq_qmgr_name}
+    tty: true
+    volumes_from:
+    - webspheremq-conf
+    - webspheremq-datavolume
+    ports:
+    - ${ampq_listen_port}:1414
+    labels:
+      io.rancher.sidekicks: webspheremq-conf, webspheremq-datavolume
+      io.rancher.container.hostname_override: container_name
+  webspheremq-conf:
+    image: jeffkolb/rancher-websphere-mq-conf:1
+    entrypoint:
+    - /bin/true
+    network_mode: none
+    volumes:
+    - /etc/mqm
+    labels:
+      io.rancher.container.start_once: 'true'
+      io.rancher.container.hostname_override: container_name
+  
+  sender:
+    image: jeffkolb/rancher-websphere-sender:1
+    environment:
+      LICENSE: "accept"
+      ADMIN_CENTER_PORT: ${sender_admin_port}
+    tty: true
+    links:
+    - mq:mqfull
+    volumes_from:
+    - webspheresender-conf
+    depends_on:
+    - mq
+    - receiver
+    ports:
+    - ${sender_ui_port}:9080
+    - ${sender_admin_port}:9443
+    labels:
+      io.rancher.sidekicks: webspheresender-conf
+      io.rancher.container.hostname_override: container_name
+  webspheresender-conf:
+    image: jeffkolb/rancher-websphere-sender-conf:1
+    entrypoint:
+    - /bin/true
+    network_mode: none
+    volumes:
+    - /opt/ibm/wlp/usr/servers/defaultServer
+    labels:
+      io.rancher.container.start_once: 'true'
+      io.rancher.container.hostname_override: container_name
+  
+  receiver:
+    image: jeffkolb/rancher-websphere-receiver:1
+    environment:
+      LICENSE: accept
+      ADMIN_CENTER_PORT: ${sender_admin_port}
+    tty: true
+    links:
+    - mq:mqfull
+    volumes_from:
+    - webspherereceiver-conf
+    depends_on:
+    - mq
+    ports:
+    - ${receiver_ui_port}:9080
+    - ${receiver_admin_port}:9443
+    labels:
+      io.rancher.sidekicks: webspherereceiver-conf
+      io.rancher.container.hostname_override: container_name
+  webspherereceiver-conf:
+    image: jeffkolb/rancher-websphere-receiver-conf:1
+    entrypoint:
+    - /bin/true
+    network_mode: none
+    volumes:
+    - /opt/ibm/wlp/usr/servers/defaultServer
+    labels:
+      io.rancher.container.start_once: 'true'
+      io.rancher.container.hostname_override: container_name

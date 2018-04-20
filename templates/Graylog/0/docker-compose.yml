@@ -1,0 +1,54 @@
+version: '2'
+services:
+  graylog-server:
+    restart: always
+    environment:
+      GRAYLOG_MONGODB_URI: "mongodb://${DB_USER}:${DB_PW}@${DB_URIS}/${DB_NAME}?replicaSet=${RS_NAME}"
+      GRAYLOG_PASSWORD_SECRET: ${GRAYLOG_PASSWORD_SECRET}
+      GRAYLOG_ROOT_PASSWORD_SHA2: ${GRAYLOG_ROOT_PASSWORD_SHA2}
+      GRAYLOG_REST_TRANSPORT_URI: ${GRAYLOG_REST_TRANSPORT_URI}
+      GRAYLOG_ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+      GRAYLOG_WEB_LISTEN_URI: "http://0.0.0.0:80/"
+      GRAYLOG_SERVER_JAVA_OPTS: "-Xms${INITIAL_MEM}g -Xmx${MAX_MEM}g -XX:NewRatio=1 -XX:MaxMetaspaceSize=256m -server -XX:+ResizeTLAB -XX:+UseConcMarkSweepGC -XX:+CMSConcurrentMTEnabled -XX:+CMSClassUnloadingEnabled -XX:+UseParNewGC -XX:-OmitStackTraceInFastThrow"
+    image: intlfcstone/graylog-rancher:v2.4.3-2
+    external_links:
+      - ${ES_LINK}:elasticsearch
+      - ${ZK_LINK}:zk
+      - ${KAFKA_LINK}:broker
+    labels:
+      io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+      io.rancher.container.hostname_override: container_name
+      io.rancher.sidekicks: graylog-journal,graylog-plugins
+    volumes_from:
+      - graylog-journal
+  graylog-journal:
+    environment:
+      SERVICE_VOLUME: /usr/share/graylog/data/journal
+      SERVICE_UID: 1100
+      SERVICE_GID: 1100
+    labels:
+        io.rancher.container.start_once: true
+        network_mode: none
+        io.rancher.container.hostname_override: container_name
+    volumes:
+      - journal:/data/db
+    image: rawmind/alpine-volume:0.0.2-1
+  graylog-plugins:
+    environment:
+      SERVICE_VOLUME: /usr/share/graylog/plugin
+      SERVICE_UID: 1100
+      SERVICE_GID: 1100
+    labels:
+        io.rancher.container.start_once: true
+        network_mode: none
+        io.rancher.container.hostname_override: container_name
+    volumes:
+      - plugins:/usr/share/graylog/plugin
+    image: rawmind/alpine-volume:0.0.2-1
+volumes:
+  journal:
+    driver: ${VOLUME_DRIVER}
+    per_container: true
+  plugins:
+    driver: ${VOLUME_DRIVER}
+    per_container: true

@@ -1,0 +1,43 @@
+.catalog:
+  name: influxdb-windows
+  description: |
+    Influxdb
+  version: 1.4.2-rancher1
+  minimum_rancher_version: v1.0.0
+  maintainer: "Jeff Kolb <jeff.kolb@intlfcstone.com>"
+  questions:
+    - variable: "VOLUME_DRIVER"
+      description: "Volume driver to use"
+      label: "Driver:"
+      required: true
+      type: enum
+      default: "rancher-nfs"
+      options:
+        - "local"
+        - "rancher-nfs"
+    - variable: install_plugins
+      description: "Include/Install Grafana Plugins (comma-separated plugin-ids)"
+      label: "Install Plugins"
+      required: false
+      default: "grafana-clock-panel"
+      type: "string"
+version: '2'
+services:
+  influxdb:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 8086
+      unhealthy_threshold: 3
+      interval: 2000
+  grafana:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 3000
+      unhealthy_threshold: 3
+      interval: 5000

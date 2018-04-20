@@ -1,0 +1,47 @@
+version: '2'
+services:
+  mongo-cluster:
+    restart: always
+    environment:
+      MONGO_SERVICE_NAME: mongo-cluster
+      CATTLE_SCRIPT_DEBUG: ${debug}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+    entrypoint: /opt/rancher/bin/entrypoint.sh
+    command:
+    - --replSet
+    - "${replset_name}"
+    image: mongo:3.4
+    labels:
+      io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+      io.rancher.container.hostname_override: container_name
+      io.rancher.sidekicks: mongo-base, mongo-datavolume
+    volumes_from:
+      - mongo-datavolume
+      - mongo-base
+    ports:
+      - ${MONGO_EXTERNAL_PORT}:27017/tcp
+  mongo-base:
+    restart: always
+    labels:
+      io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.start_once: true
+    image: rancher/mongodb-conf:v0.1.1
+    entrypoint: /bin/true
+  mongo-datavolume:
+    environment:
+      SERVICE_VOLUME: /data/db
+      SERVICE_UID: 999
+      SERVICE_GID: 999
+    labels:
+        io.rancher.container.start_once: true
+        network_mode: none
+        io.rancher.container.hostname_override: container_name
+    volumes:
+      - mongodata:/data/db
+    image: rawmind/alpine-volume:0.0.2-1
+volumes:
+  mongodata:
+    driver: ${VOLUME_DRIVER}
+    per_container: true

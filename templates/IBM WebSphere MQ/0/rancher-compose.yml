@@ -1,0 +1,67 @@
+.catalog:
+  name: "IBM WebSphere MQ"
+  version: "1.0.0"
+  description: "IBM's Message Oriented Middleware for service-oriented architectures."
+  uuid: IBMWSMQ-JeffK1
+  minimum_rancher_version: v1.1.3
+  questions:
+    - variable: ampq_listen_port
+      description: "Public port to expose for AMPQ traffic."
+      label: "AMPQ listening port"
+      type: "string"
+      required: true
+      default: "1414"
+    - variable: sender_ui_port
+      description: "Public port to expose for the sender web UI."
+      label: "Sender web UI Port"
+      type: "string"
+      required: true
+      default: "32783"
+    - variable: sender_admin_port
+      description: "Public port to expose for the sender admin center UI."
+      label: "Sender Admin Center UI Port"
+      type: "string"
+      required: true
+      default: "32782"
+    - variable: receiver_ui_port
+      description: "Public port to expose for the receiver web UI."
+      label: "Receiver web UI Port"
+      type: "string"
+      required: true
+      default: "32785"
+    - variable: receiver_admin_port
+      description: "Public port to expose for the receiver admin center UI."
+      label: "Receiver Admin Center UI Port"
+      type: "string"
+      required: true
+      default: "32784"
+    - variable: mq_qmgr_name
+      description: "Name of the WebSphere Message Queue Manager."
+      label: "Queue Manager name."
+      type: "string"
+      required: true
+      default: "QM1"
+
+version: '2'
+services:
+  webspheremq-datavolume:
+    scale: 1
+    start_on_create: true
+  webspheremq-conf:
+    scale: 1
+    start_on_create: true
+  mq:
+    scale: 1
+    start_on_create: true
+  sender:
+    scale: 1
+    start_on_create: true
+  webspheresender-conf:
+    scale: 1
+    start_on_create: true
+  receiver:
+    scale: 1
+    start_on_create: true
+  webspherereceiver-conf:
+    scale: 1
+    start_on_create: true
