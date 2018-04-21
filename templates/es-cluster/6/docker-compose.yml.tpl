@@ -93,8 +93,6 @@ services:
             - es-client-storage
         depends_on:
             - es-master
-        ports:
-            - "9200:9200"
 
     es-master-storage:
         labels:
