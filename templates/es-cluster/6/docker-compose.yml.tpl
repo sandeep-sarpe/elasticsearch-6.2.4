@@ -16,9 +16,9 @@ services:
             - "discovery.zen.minimum_master_nodes=${minimum_master_nodes}"
             - "node.master=true"
             - "node.data=false"
-            - "threadpool.warmer.core=1"
-            - "threadpool.warmer.max=2"
-            - "threadpool.warmer.keep_alive=2m"
+            - "thread_pool.warmer.core=1"
+            - "thread_pool.warmer.max=2"
+            - "thread_pool.warmer.keep_alive=2m"
         ulimits:
             memlock:
                 soft: -1
@@ -50,9 +50,9 @@ services:
             - "ES_JAVA_OPTS=-Xms${data_heap_size} -Xmx${data_heap_size}"
             - "node.master=false"
             - "node.data=true"
-            - "threadpool.warmer.core=1"
-            - "threadpool.warmer.max=2"
-            - "threadpool.warmer.keep_alive=2m"
+            - "thread_pool.warmer.core=1"
+            - "thread_pool.warmer.max=2"
+            - "thread_pool.warmer.keep_alive=2m"
         ulimits:
             memlock:
                 soft: -1
@@ -84,9 +84,9 @@ services:
             - "ES_JAVA_OPTS=-Xms${client_heap_size} -Xmx${client_heap_size}"
             - "node.master=false"
             - "node.data=false"
-            - "threadpool.warmer.core=1"
-            - "threadpool.warmer.max=2"
-            - "threadpool.warmer.keep_alive=2m"
+            - "thread_pool.warmer.core=1"
+            - "thread_pool.warmer.max=2"
+            - "thread_pool.warmer.keep_alive=2m"
         ulimits:
             memlock:
                 soft: -1
