@@ -16,7 +16,7 @@ services:
             - "discovery.zen.minimum_master_nodes=${minimum_master_nodes}"
             - "node.master=true"
             - "node.data=false"
-       ulimits:
+        ulimits:
             memlock:
                 soft: -1
                 hard: -1
@@ -50,7 +50,7 @@ services:
             - "thread_pool.search.type=fixed"
             - "thread_pool.search.size=25"
             - "thread_pool.search.queue_size=1000"
-       ulimits:
+        ulimits:
             memlock:
                 soft: -1
                 hard: -1
@@ -81,7 +81,7 @@ services:
             - "ES_JAVA_OPTS=-Xms${client_heap_size} -Xmx${client_heap_size}"
             - "node.master=false"
             - "node.data=false"
-       ulimits:
+        ulimits:
             memlock:
                 soft: -1
                 hard: -1
