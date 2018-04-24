@@ -109,6 +109,18 @@ catalog:
             - rancher-efs
             - rancher-ebs
 
+        - variable: "thread_pool_search_size"
+          type: "int"
+          required: false
+          label: "thread_pool.search.size (data nodes)"
+          description: "For count/search/suggest operations. Thread pool type is fixed_auto_queue_size with a size of int((# of available_processors * 3) / 2) + 1. (data nodes)"
+
+        - variable: "thread_pool_search_queue_size"
+          type: "int"
+          required: false
+          label: "thread_pool.search.queue_size (data nodes)"
+          description: "Initial queue_size of 1000. (data nodes)"
+
 services:
 
   es-master:

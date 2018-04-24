@@ -47,9 +47,8 @@ services:
             - "ES_JAVA_OPTS=-Xms${data_heap_size} -Xmx${data_heap_size}"
             - "node.master=false"
             - "node.data=true"
-            - "thread_pool.search.type=fixed"
-            - "thread_pool.search.size=25"
-            - "thread_pool.search.queue_size=1000"
+            - "thread_pool.search.size=${thread_pool_search_size}"
+            - "thread_pool.search.queue_size=${thread_pool_search_queue_size}"
         ulimits:
             memlock:
                 soft: -1
