@@ -136,11 +136,6 @@ services:
         image: rancher/lb-service-haproxy:v0.9.1
         ports:
             - "9201:9200"
-        labels:
-            io.rancher.container.agent.role: environmentAdmin,agent
-            io.rancher.container.agent_service.drain_provider: 'true'
-            io.rancher.container.create_agent: 'true'
-
 
     {{- if eq .Values.UPDATE_SYSCTL "true" }}
     es-master-sysctl:
