@@ -184,6 +184,14 @@ services:
         external_links:
             - es-client:elasticsearch
     {{- end}}
+    es-loadbalancer:
+    image: rancher/lb-service-haproxy:v0.9.1
+    ports:
+    - 9201:9200/tcp
+    labels:
+      io.rancher.container.agent.role: environmentAdmin,agent
+      io.rancher.container.agent_service.drain_provider: 'true'
+      io.rancher.container.create_agent: 'true'
 
 volumes:
   es-storage-volume:
